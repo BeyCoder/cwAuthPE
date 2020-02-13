@@ -19,7 +19,7 @@ class AuthMain extends PluginBase
         if($this->getApi() == null)
         {
             $this->getLogger()->info("Плагин cwApiPE не найден! Установите и попробуйте запустить ещё раз");
-
+            $this->getServer()->getPluginManager()->disablePlugin($this);
         }
     }
 
