@@ -1,0 +1,9 @@
+name: cwApiPE
+author: CoderWorld Team
+version: 0.0.1
+main: BeyCoder\AuthMain
+depend:
+  - cwApiPE
+api:
+  - 2.0.0
+  - 3.0.0
