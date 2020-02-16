@@ -8,6 +8,7 @@ use BeyCoder\Auth\AuthManager;
 use BeyCoder\Auth\AuthSaveSystem;
 use Exception;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Player;
@@ -29,6 +30,9 @@ class JoinEvent implements Listener
         $this->main = $main;
     }
 
+    /**
+     * @param PlayerLoginEvent $event
+     */
     public function onJoin(PlayerLoginEvent $event)
     {
         $player = $event->getPlayer();
@@ -41,6 +45,7 @@ class JoinEvent implements Listener
         try {
             if ($this->main->users[strtolower($player->getName())]->login("")) {
                 $player->sendMessage($this->main->getApi()->getLangManager("ru")->get("successAuthMessage"));
+                $player->getServer()->getPluginManager()->callEvent(new PlayerAuthEvent($player));
             }else
             {
                 $player->sendMessage($this->main->getApi()->getLangManager("ru")->get("authRequiredMessage"));
@@ -57,9 +62,33 @@ class JoinEvent implements Listener
         }
     }
 
+    public function onLogin(PlayerAuthEvent $event)
+    {
+        $this->main->getServer()->broadcastTitle("\n\n", "§a§l+ §r§o§b" . $event->getPlayer()->getDisplayName());
+    }
+
+    public function onLogout(PlayerDeauthEvent $event)
+    {
+        $this->main->getServer()->broadcastTitle("\n\n", "§c§l- §r§o§b" . $event->getPlayer()->getDisplayName());
+    }
+
+    /**
+     * @param PlayerJoinEvent $event
+     */
+    public function onJoinToServer(PlayerJoinEvent $event)
+    {
+        $event->setJoinMessage(false);
+    }
+
+    /**
+     * @param PlayerQuitEvent $event
+     */
     public function onQuit(PlayerQuitEvent $event)
     {
         $player = $event->getPlayer();
+        $event->setQuitMessage(false);
+
+        if($this->main->users[strtolower($player->getName())]->isLogged() == true) $this->main->getServer()->getPluginManager()->callEvent(new PlayerDeauthEvent($player));
 
         unset($this->main->users[strtolower($player->getName())]);
         unset($this->main->register[strtolower($player->getName())]);
@@ -74,10 +103,10 @@ class JoinEvent implements Listener
     {
         foreach ($this->main->getServer()->getOnlinePlayers() as $onlinePlayer)
         {
-            if(strtolower($player->getName()) == strtolower($onlinePlayer->getName()) && $player->getClientId() != $onlinePlayer->getClientId())
+            if(strtolower($player->getName()) == strtolower($onlinePlayer->getName()))
             {
-                $player->kick($this->main->getApi()->getLangManager("ru")->get("playerAlreadyOnline"), false);
-                return false;
+                //$player->kick($this->main->getApi()->getLangManager("ru")->get("playerAlreadyOnline"), false);
+                //return false;
             }
         }
 

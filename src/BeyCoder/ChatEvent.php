@@ -35,6 +35,8 @@ class ChatEvent implements Listener
         if($this->main->users[strtolower($player->getName())]->isLogged() == false) {
             $event->setCancelled(true);
 
+            if($message[0] == "/") return;
+
             if ($this->main->register[strtolower($player->getName())]) {
                 if (strlen($message) < 6 || strlen($message) > 25) {
                     $player->sendMessage($this->main->getApi()->getLangManager("ru")->get("incorrectRegisterPassword"));
@@ -42,6 +44,8 @@ class ChatEvent implements Listener
                     $newUser = new AuthSaveSystem($player, -1, $message, $player->getClientId());
                     $this->main->getApi()->getDatabaseManager()->getDatabaseAuth()->createUser($newUser);
                     $player->sendMessage($this->main->getApi()->getLangManager("ru")->get("successRegisterMessage"));
+                    $player->getServer()->getPluginManager()->callEvent(new PlayerAuthEvent($player));
+
                     try {
                         $this->main->users[strtolower($player->getName())]->login($message);
                         $this->main->register[strtolower($player->getName())] = false;
@@ -56,6 +60,7 @@ class ChatEvent implements Listener
                     if($this->main->users[strtolower($player->getName())]->login($message))
                     {
                         $player->sendMessage($this->main->getApi()->getLangManager("ru")->get("successAuthMessage"));
+                        $player->getServer()->getPluginManager()->callEvent(new PlayerAuthEvent($player));
 
                         $user = new AuthSaveSystem($player, -1, $message, (string)$player->getClientId());
                         $this->main->getApi()->getDatabaseManager()->getDatabaseAuth()->updateCID($user);
