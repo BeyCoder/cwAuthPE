@@ -64,12 +64,12 @@ class JoinEvent implements Listener
 
     public function onLogin(PlayerAuthEvent $event)
     {
-        $this->main->getServer()->broadcastTitle("\n\n", "§a§l+ §r§o§b" . $event->getPlayer()->getDisplayName());
+        $this->main->getServer()->broadcastTitle("\n\n", "§a§l+ §r§o§b" . $event->getPlayer()->getName());
     }
 
     public function onLogout(PlayerDeauthEvent $event)
     {
-        $this->main->getServer()->broadcastTitle("\n\n", "§c§l- §r§o§b" . $event->getPlayer()->getDisplayName());
+        $this->main->getServer()->broadcastTitle("\n\n", "§c§l- §r§o§b" . $event->getPlayer()->getName());
     }
 
     /**

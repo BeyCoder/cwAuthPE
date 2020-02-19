@@ -46,6 +46,8 @@ class ChatEvent implements Listener
                     $player->sendMessage($this->main->getApi()->getLangManager("ru")->get("successRegisterMessage"));
                     $player->getServer()->getPluginManager()->callEvent(new PlayerAuthEvent($player));
 
+                    $this->main->getApi()->getPrefixManager($player)->setPrefix($this->main->getApi()->getLangManager("ru")->get("defaultPlayerPrefix"));
+
                     try {
                         $this->main->users[strtolower($player->getName())]->login($message);
                         $this->main->register[strtolower($player->getName())] = false;
