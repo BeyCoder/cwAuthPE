@@ -65,6 +65,7 @@ class JoinEvent implements Listener
     public function onLogin(PlayerAuthEvent $event)
     {
         $this->main->getServer()->broadcastTitle("\n\n", "§a§l+ §r§o§b" . $event->getPlayer()->getName());
+        $event->getPlayer()->setNameTag($event->getPlayer()->getDisplayName());
     }
 
     public function onLogout(PlayerDeauthEvent $event)
@@ -78,6 +79,7 @@ class JoinEvent implements Listener
     public function onJoinToServer(PlayerJoinEvent $event)
     {
         $event->setJoinMessage(false);
+        $event->getPlayer()->setDisplayName($event->getPlayer()->getDisplayName());
     }
 
     /**
