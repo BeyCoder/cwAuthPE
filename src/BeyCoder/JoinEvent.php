@@ -64,16 +64,23 @@ class JoinEvent implements Listener
 
     public function onLogin(PlayerAuthEvent $event)
     {
-        $this->main->getServer()->broadcastTitle("\n\n", "§a§l+ §r§o§b" . $event->getPlayer()->getName());
+        $prefix = $this->main->getApi()->getPrefixManager($event->getPlayer())->getPrefix();
+
         $event->getPlayer()->setNameTag($event->getPlayer()->getDisplayName());
+
+        if($prefix == "§r§fИгрок§r") return;
+        $this->main->getServer()->broadcastTitle("\n\n", "§a§l+ §r§8(" . $prefix ."§8) §r§o§b" . $event->getPlayer()->getName());
     }
 
     public function onLogout(PlayerDeauthEvent $event)
     {
-        $this->main->getServer()->broadcastTitle("\n\n", "§c§l- §r§o§b" . $event->getPlayer()->getName());
+        $prefix = $this->main->getApi()->getPrefixManager($event->getPlayer())->getPrefix();
+
+        if ($prefix == "§r§fИгрок§r") return;
+        $this->main->getServer()->broadcastTitle("\n\n", "§c§l- §r§8(" . $prefix . "§8) §r§o§b" . $event->getPlayer()->getName());
     }
 
-    /**
+        /**
      * @param PlayerJoinEvent $event
      */
     public function onJoinToServer(PlayerJoinEvent $event)
