@@ -80,13 +80,13 @@ class JoinEvent implements Listener
         $this->main->getServer()->broadcastTitle("\n\n", "§c§l- §r§8(" . $prefix . "§8) §r§o§b" . $event->getPlayer()->getName());
     }
 
-        /**
+    /**
      * @param PlayerJoinEvent $event
      */
     public function onJoinToServer(PlayerJoinEvent $event)
     {
         $event->setJoinMessage(false);
-        $event->getPlayer()->setDisplayName($event->getPlayer()->getDisplayName());
+        $event->getPlayer()->setNameTag($event->getPlayer()->getDisplayName());
     }
 
     /**
